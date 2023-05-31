@@ -4,6 +4,7 @@ config:
   scalars:
     Void: undefined
     Date: number
+    JSON: any
 generates:
   src/generated/introspection.json:
     plugins:

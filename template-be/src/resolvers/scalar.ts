@@ -30,3 +30,20 @@ export const dateScalar = new GraphQLScalarType({
     return null
   },
 })
+
+export const jsonScalar = new GraphQLScalarType({
+  name: 'JSON',
+  description: 'JSON custom scalar type',
+  serialize(value) {
+    return value
+  },
+  parseValue(value) {
+    return value
+  },
+  parseLiteral(ast) {
+    if (ast.kind === Kind.OBJECT) {
+      return ast
+    }
+    return null
+  },
+})

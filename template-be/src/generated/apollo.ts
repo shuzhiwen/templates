@@ -35,6 +35,11 @@ export type AuthInfo = {
   userId: Scalars['String']
 }
 
+export type ChannelInput = {
+  channelId: Scalars['String']
+  userId: Scalars['String']
+}
+
 export type IdInput = {
   id: Scalars['String']
 }
@@ -47,13 +52,22 @@ export type Image = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  enterChannel: Scalars['Boolean']
+  exitChannel: Scalars['Boolean']
   loginByEmail: AuthInfo
   logonByEmail: AuthInfo
   resetPasswordByEmail: Scalars['Boolean']
   sayHello: Scalars['Boolean']
+  sendData: Scalars['Boolean']
   sendEmailVerificationCode?: Maybe<Scalars['Boolean']>
-  transport: Scalars['Boolean']
-  transportLogin: Scalars['Boolean']
+}
+
+export type MutationEnterChannelArgs = {
+  input: ChannelInput
+}
+
+export type MutationExitChannelArgs = {
+  input: ChannelInput
 }
 
 export type MutationLoginByEmailArgs = {
@@ -77,16 +91,12 @@ export type MutationSayHelloArgs = {
   hello?: InputMaybe<Scalars['String']>
 }
 
+export type MutationSendDataArgs = {
+  input: SendDataInput
+}
+
 export type MutationSendEmailVerificationCodeArgs = {
   email: Scalars['String']
-}
-
-export type MutationTransportArgs = {
-  input: TransportInput
-}
-
-export type MutationTransportLoginArgs = {
-  input: TransportLoginInput
 }
 
 export type Query = {
@@ -97,11 +107,17 @@ export type Query = {
 }
 
 export type QueryTransportHistoryArgs = {
-  input: IdInput
+  channelId: Scalars['String']
 }
 
 export type QueryTransportUserCountArgs = {
-  input: IdInput
+  channelId: Scalars['String']
+}
+
+export type SendDataInput = {
+  channelId: Scalars['String']
+  data: Scalars['JSON']
+  userId: Scalars['String']
 }
 
 export type Subscription = {
@@ -111,7 +127,7 @@ export type Subscription = {
 }
 
 export type SubscriptionTransportArgs = {
-  input: IdInput
+  channelId: Scalars['String']
 }
 
 export type System = {
@@ -122,17 +138,6 @@ export type System = {
 export type Transport = {
   __typename?: 'Transport'
   data: Scalars['JSON']
-  userId: Scalars['String']
-}
-
-export type TransportInput = {
-  channelId: Scalars['String']
-  data: Scalars['JSON']
-  userId: Scalars['String']
-}
-
-export type TransportLoginInput = {
-  channelId: Scalars['String']
   userId: Scalars['String']
 }
 
@@ -248,6 +253,7 @@ export type DirectiveResolverFn<
 export type ResolversTypes = ResolversObject<{
   AuthInfo: ResolverTypeWrapper<AuthInfo>
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
+  ChannelInput: ChannelInput
   Date: ResolverTypeWrapper<Scalars['Date']>
   IdInput: IdInput
   Image: ResolverTypeWrapper<Image>
@@ -255,12 +261,11 @@ export type ResolversTypes = ResolversObject<{
   JSON: ResolverTypeWrapper<Scalars['JSON']>
   Mutation: ResolverTypeWrapper<{}>
   Query: ResolverTypeWrapper<{}>
+  SendDataInput: SendDataInput
   String: ResolverTypeWrapper<Scalars['String']>
   Subscription: ResolverTypeWrapper<{}>
   System: never
   Transport: ResolverTypeWrapper<Transport>
-  TransportInput: TransportInput
-  TransportLoginInput: TransportLoginInput
   Void: ResolverTypeWrapper<Scalars['Void']>
 }>
 
@@ -268,6 +273,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   AuthInfo: AuthInfo
   Boolean: Scalars['Boolean']
+  ChannelInput: ChannelInput
   Date: Scalars['Date']
   IdInput: IdInput
   Image: Image
@@ -275,12 +281,11 @@ export type ResolversParentTypes = ResolversObject<{
   JSON: Scalars['JSON']
   Mutation: {}
   Query: {}
+  SendDataInput: SendDataInput
   String: Scalars['String']
   Subscription: {}
   System: never
   Transport: Transport
-  TransportInput: TransportInput
-  TransportLoginInput: TransportLoginInput
   Void: Scalars['Void']
 }>
 
@@ -319,6 +324,18 @@ export type MutationResolvers<
   ParentType extends
     ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation'],
 > = ResolversObject<{
+  enterChannel?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationEnterChannelArgs, 'input'>
+  >
+  exitChannel?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationExitChannelArgs, 'input'>
+  >
   loginByEmail?: Resolver<
     ResolversTypes['AuthInfo'],
     ParentType,
@@ -349,23 +366,17 @@ export type MutationResolvers<
     ContextType,
     Partial<MutationSayHelloArgs>
   >
+  sendData?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationSendDataArgs, 'input'>
+  >
   sendEmailVerificationCode?: Resolver<
     Maybe<ResolversTypes['Boolean']>,
     ParentType,
     ContextType,
     RequireFields<MutationSendEmailVerificationCodeArgs, 'email'>
-  >
-  transport?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationTransportArgs, 'input'>
-  >
-  transportLogin?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationTransportLoginArgs, 'input'>
   >
 }>
 
@@ -379,13 +390,13 @@ export type QueryResolvers<
     Maybe<Array<ResolversTypes['Transport']>>,
     ParentType,
     ContextType,
-    RequireFields<QueryTransportHistoryArgs, 'input'>
+    RequireFields<QueryTransportHistoryArgs, 'channelId'>
   >
   transportUserCount?: Resolver<
     Maybe<ResolversTypes['Int']>,
     ParentType,
     ContextType,
-    RequireFields<QueryTransportUserCountArgs, 'input'>
+    RequireFields<QueryTransportUserCountArgs, 'channelId'>
   >
 }>
 
@@ -405,7 +416,7 @@ export type SubscriptionResolvers<
     'transport',
     ParentType,
     ContextType,
-    RequireFields<SubscriptionTransportArgs, 'input'>
+    RequireFields<SubscriptionTransportArgs, 'channelId'>
   >
 }>
 

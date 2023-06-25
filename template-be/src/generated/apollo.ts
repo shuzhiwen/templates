@@ -108,6 +108,8 @@ export type Query = {
 
 export type QueryTransportHistoryArgs = {
   channelId: Scalars['String']
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
 }
 
 export type QueryTransportUserCountArgs = {
@@ -117,16 +119,18 @@ export type QueryTransportUserCountArgs = {
 export type SendDataInput = {
   channelId: Scalars['String']
   data: Scalars['JSON']
+  seq: Scalars['Int']
+  serialize?: InputMaybe<Scalars['Boolean']>
   userId: Scalars['String']
 }
 
 export type Subscription = {
   __typename?: 'Subscription'
   helloWs: Scalars['String']
-  transport: Transport
+  receiveData: Transport
 }
 
-export type SubscriptionTransportArgs = {
+export type SubscriptionReceiveDataArgs = {
   channelId: Scalars['String']
 }
 
@@ -138,6 +142,7 @@ export type System = {
 export type Transport = {
   __typename?: 'Transport'
   data: Scalars['JSON']
+  seq: Scalars['Int']
   userId: Scalars['String']
 }
 
@@ -411,12 +416,12 @@ export type SubscriptionResolvers<
     ParentType,
     ContextType
   >
-  transport?: SubscriptionResolver<
+  receiveData?: SubscriptionResolver<
     ResolversTypes['Transport'],
-    'transport',
+    'receiveData',
     ParentType,
     ContextType,
-    RequireFields<SubscriptionTransportArgs, 'channelId'>
+    RequireFields<SubscriptionReceiveDataArgs, 'channelId'>
   >
 }>
 
@@ -436,6 +441,7 @@ export type TransportResolvers<
     ResolversParentTypes['Transport'] = ResolversParentTypes['Transport'],
 > = ResolversObject<{
   data?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>
+  seq?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>

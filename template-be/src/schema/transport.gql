@@ -3,12 +3,15 @@ scalar JSON
 type Transport {
   userId: String!
   data: JSON!
+  seq: Int!
 }
 
 input SendDataInput {
+  serialize: Boolean
   channelId: String!
   userId: String!
   data: JSON!
+  seq: Int!
 }
 
 input ChannelInput {
@@ -18,7 +21,7 @@ input ChannelInput {
 
 type Query {
   transportUserCount(channelId: String!): Int
-  transportHistory(channelId: String!): [Transport!]
+  transportHistory(channelId: String!, offset: Int, limit: Int): [Transport!]
 }
 
 type Mutation {
@@ -28,5 +31,5 @@ type Mutation {
 }
 
 type Subscription {
-  transport(channelId: String!): Transport!
+  receiveData(channelId: String!): Transport!
 }

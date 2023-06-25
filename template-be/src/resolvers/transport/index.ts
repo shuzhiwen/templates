@@ -17,7 +17,11 @@ export const transportQuery: QueryResolvers = {
   },
 
   transportHistory: (_, args) => {
-    return cache.get(args.channelId)?.data ?? []
+    const {channelId} = args
+    const offset = args.offset ?? 0
+    const limit = args.limit ?? Infinity
+
+    return cache.get(channelId)?.data.slice(offset, offset + limit) ?? []
   },
 }
 
@@ -30,6 +34,7 @@ export const transportMutation: MutationResolvers = {
     }
 
     cache.get(channelId)!.userIds.add(userId)
+    cache.get(channelId)!.data.push({userId, data: 'enter', seq: 0})
 
     setTimeout(() => cache.delete(channelId), 24 * 60 * 60 * 1000)
 
@@ -49,13 +54,14 @@ export const transportMutation: MutationResolvers = {
   },
 
   sendData: (_, args) => {
-    const {userId, channelId, data} = args.input
+    const {channelId, serialize, ...rest} = args.input
+    const lastSeq = cache.get(channelId)?.data.at(-1)?.seq
 
-    if (!cache.get(channelId)) {
+    if (serialize && lastSeq !== rest.seq - 1) {
       return false
     }
 
-    cache.get(channelId)!.data.push({userId, data})
+    cache.get(channelId)?.data.push(rest)
     pubsub.publish(key, args.input)
 
     return true
@@ -63,7 +69,7 @@ export const transportMutation: MutationResolvers = {
 }
 
 export const transportSubscription: SubscriptionResolvers = {
-  transport: {
+  receiveData: {
     resolve: (payload: SendDataInput) => payload,
     subscribe: (_, args) => ({
       [Symbol.asyncIterator]: withFilter(

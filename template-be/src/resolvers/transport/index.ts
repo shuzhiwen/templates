@@ -21,7 +21,13 @@ export const transportQuery: QueryResolvers = {
     const offset = args.offset ?? 0
     const limit = args.limit ?? Infinity
 
-    return cache.get(channelId)?.data.slice(offset, offset + limit) ?? []
+    return (
+      cache
+        .get(channelId)
+        ?.data.slice()
+        .reverse()
+        .slice(offset, offset + limit) ?? []
+    )
   },
 }
 
@@ -55,7 +61,7 @@ export const transportMutation: MutationResolvers = {
 
   sendData: (_, args) => {
     const {channelId, serialize, ...rest} = args.input
-    const lastSeq = cache.get(channelId)?.data.at(-1)?.seq
+    const lastSeq = cache.get(channelId)?.data.slice(-1)[0]?.seq
 
     if (serialize && lastSeq !== rest.seq - 1) {
       return false

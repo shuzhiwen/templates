@@ -12,8 +12,8 @@ const pubsub = new PubSub()
 const cache: Map<string, {userIds: Set<string>; data: Transport[]}> = new Map()
 
 export const transportQuery: QueryResolvers = {
-  transportUserCount: (_, args) => {
-    return cache.get(args.channelId)?.userIds.size ?? null
+  transportUsers: (_, args) => {
+    return Array.from(cache.get(args.channelId)?.userIds ?? [])
   },
 
   transportHistory: (_, args) => {

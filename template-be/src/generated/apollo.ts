@@ -103,7 +103,7 @@ export type Query = {
   __typename?: 'Query'
   hello: Scalars['String']
   transportHistory?: Maybe<Array<Transport>>
-  transportUserCount?: Maybe<Scalars['Int']>
+  transportUsers: Array<Scalars['String']>
 }
 
 export type QueryTransportHistoryArgs = {
@@ -112,7 +112,7 @@ export type QueryTransportHistoryArgs = {
   offset?: InputMaybe<Scalars['Int']>
 }
 
-export type QueryTransportUserCountArgs = {
+export type QueryTransportUsersArgs = {
   channelId: Scalars['String']
 }
 
@@ -397,11 +397,11 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryTransportHistoryArgs, 'channelId'>
   >
-  transportUserCount?: Resolver<
-    Maybe<ResolversTypes['Int']>,
+  transportUsers?: Resolver<
+    Array<ResolversTypes['String']>,
     ParentType,
     ContextType,
-    RequireFields<QueryTransportUserCountArgs, 'channelId'>
+    RequireFields<QueryTransportUsersArgs, 'channelId'>
   >
 }>
 

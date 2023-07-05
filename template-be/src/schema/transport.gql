@@ -20,7 +20,7 @@ input ChannelInput {
 }
 
 type Query {
-  transportUserCount(channelId: String!): Int
+  transportUsers(channelId: String!): [String!]!
   transportHistory(channelId: String!, offset: Int, limit: Int): [Transport!]
 }
 

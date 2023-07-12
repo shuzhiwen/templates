@@ -26,8 +26,8 @@ type Query {
 
 type Mutation {
   sendData(input: SendDataInput!): Boolean!
-  enterChannel(input: ChannelInput!): Boolean!
-  exitChannel(input: ChannelInput!): Boolean!
+  enterChannel(input: ChannelInput!): Int!
+  exitChannel(input: ChannelInput!): Int!
 }
 
 type Subscription {

@@ -34,29 +34,30 @@ export const transportQuery: QueryResolvers = {
 export const transportMutation: MutationResolvers = {
   enterChannel: (_, args) => {
     const {channelId, userId} = args.input
+    const channel = cache.get(channelId) || {userIds: new Set(), data: []}
+
+    channel.userIds.add(userId)
+    channel.data.push({userId, data: 'enter', seq: 0})
 
     if (!cache.get(channelId)) {
-      cache.set(channelId, {userIds: new Set(), data: []})
+      cache.set(channelId, channel)
+      setTimeout(() => cache.delete(channelId), 24 * 60 * 60 * 1000)
     }
 
-    cache.get(channelId)!.userIds.add(userId)
-    cache.get(channelId)!.data.push({userId, data: 'enter', seq: 0})
-
-    setTimeout(() => cache.delete(channelId), 24 * 60 * 60 * 1000)
-
-    return true
+    return channel.userIds.size
   },
 
   exitChannel: (_, args) => {
     const {channelId, userId} = args.input
+    const channel = cache.get(channelId)
 
-    cache.get(channelId)?.userIds.delete(userId)
+    channel?.userIds.delete(userId)
 
-    if (cache.get(channelId)?.userIds.size === 0) {
+    if (channel?.userIds.size === 0) {
       cache.delete(channelId)
     }
 
-    return true
+    return channel?.userIds.size ?? 0
   },
 
   sendData: (_, args) => {

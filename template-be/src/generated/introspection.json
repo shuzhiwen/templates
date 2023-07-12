@@ -201,7 +201,7 @@
             "type": {
               "kind": "NON_NULL",
               "name": null,
-              "ofType": {"kind": "SCALAR", "name": "Boolean", "ofType": null}
+              "ofType": {"kind": "SCALAR", "name": "Int", "ofType": null}
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -230,7 +230,7 @@
             "type": {
               "kind": "NON_NULL",
               "name": null,
-              "ofType": {"kind": "SCALAR", "name": "Boolean", "ofType": null}
+              "ofType": {"kind": "SCALAR", "name": "Int", "ofType": null}
             },
             "isDeprecated": false,
             "deprecationReason": null

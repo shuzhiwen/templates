@@ -52,8 +52,8 @@ export type Image = {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  enterChannel: Scalars['Boolean']
-  exitChannel: Scalars['Boolean']
+  enterChannel: Scalars['Int']
+  exitChannel: Scalars['Int']
   loginByEmail: AuthInfo
   logonByEmail: AuthInfo
   resetPasswordByEmail: Scalars['Boolean']
@@ -330,13 +330,13 @@ export type MutationResolvers<
     ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation'],
 > = ResolversObject<{
   enterChannel?: Resolver<
-    ResolversTypes['Boolean'],
+    ResolversTypes['Int'],
     ParentType,
     ContextType,
     RequireFields<MutationEnterChannelArgs, 'input'>
   >
   exitChannel?: Resolver<
-    ResolversTypes['Boolean'],
+    ResolversTypes['Int'],
     ParentType,
     ContextType,
     RequireFields<MutationExitChannelArgs, 'input'>

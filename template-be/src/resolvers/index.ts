@@ -2,7 +2,11 @@ import {Resolvers} from '@/generated'
 import {authMutation} from './auth/mutation'
 import {helloMutation, helloQuery, helloSubscription} from './hello'
 import {dateScalar, jsonScalar, voidScalar} from './scalar'
-import {transportMutation, transportQuery, transportSubscription} from './transport'
+import {
+  transportMutation,
+  transportQuery,
+  transportSubscription,
+} from './transport'
 
 export * from './auth/jwt'
 

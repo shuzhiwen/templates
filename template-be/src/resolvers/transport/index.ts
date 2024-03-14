@@ -4,7 +4,7 @@ import {
   SendDataInput,
   SubscriptionResolvers,
   Transport,
-} from '@generated'
+} from '@/generated'
 import {PubSub, withFilter} from 'graphql-subscriptions'
 
 const key = 'TRANSPORT'
